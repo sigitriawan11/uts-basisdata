@@ -1,183 +1,190 @@
-# 🏥 Database Schema – Sistem Informasi Rumah Sakit
 
-Struktur database berdasarkan file migration Laravel yang tersedia:
+# UTS BASIS DATA
 
-- `rumah_sakits`
-- `polikliniks`
-- `pasiens`
-- `dokters`
-- `obats`
-- `jadwal_prakteks`
-- `kunjungans`
-- `reseps`
 
----
+### Model
 
-## 1. 🏥 rumah_sakits
+* Rumah Sakit
+* Poliklinik
+* Dokter
+* Jadwal Praktek
+* Pasien
+* Kunjungan
+* Obat
+* Resep
+* User
 
-| Kolom            | Tipe Data         | Keterangan |
-|------------------|-------------------|------------|
-| id               | BIGINT (PK, AI)   | Primary key |
-| kode_rs          | VARCHAR(20)       | Unique |
-| nama             | VARCHAR(255)      | Nama rumah sakit |
-| kelas_rs         | VARCHAR(255)      | Nullable |
-| akreditasi       | VARCHAR(255)      | Nullable |
-| penyelenggara    | VARCHAR(255)      | - |
-| alamat           | TEXT              | - |
-| kota             | VARCHAR(255)      | - |
-| provinsi         | VARCHAR(255)      | - |
-| kode_pos         | VARCHAR(255)      | Nullable |
-| telepon          | VARCHAR(255)      | Nullable |
-| email            | VARCHAR(255)      | Nullable |
-| website          | VARCHAR(255)      | Nullable |
-| fasilitas        | JSON              | Nullable |
-| created_at       | TIMESTAMP         | - |
-| updated_at       | TIMESTAMP         | - |
 
----
+## Struktur project
 
-## 2. 🏥 polikliniks
+```
+├── docker-compose.yml
+├── src
+│   ├── artisan
+│   ├── composer.json
+│   ├── vite.config.js
+│   ├── app
+│   │   ├── Providers
+│   │   │   ├── AppServiceProvider.php
+│   │   │   └── Filament
+│   │   │       └── AdminPanelProvider.php
+│   │   ├── Filament
+│   │   │   ├── Admin 
+│   │   │   │   ├── Resources
+│   │   │   │   │   ├── KunjunganResource.php
+│   │   │   │   │   ├── JadwalPraktekResource.php
+│   │   │   │   │   ├── PoliklinikResource.php
+│   │   │   │   │   ├── ResepResource.php
+│   │   │   │   │   ├── ObatResource.php
+│   │   │   │   │   ├── PasienResource.php
+│   │   │   │   │   └── RumahSakitResource.php
+│   │   ├── Models
+│   ├── database 
+│   │   ├── migrations
+│   │   │   ├── 2025_11_16_002710_create_obats_table.php
+│   │   │   └── 2025_11_16_002943_create_reseps_table.php
+│   ├── resources
+│   └── ...
+├── ...
+```
 
-| Kolom                | Tipe Data         | Keterangan |
-|----------------------|-------------------|------------|
-| id                   | BIGINT (PK, AI)   | - |
-| rumah_sakit_id       | BIGINT (FK)       | relasi → rumah_sakits.id |
-| kode_poli            | VARCHAR(20)       | Unique |
-| nama_poli            | VARCHAR(255)      | - |
-| kategori             | VARCHAR(255)      | Nullable |
-| kapasitas_per_hari   | INTEGER           | Default 0 |
-| butuh_ruang_tindakan | BOOLEAN           | Default false |
-| fasilitas            | JSON              | Nullable |
-| created_at           | TIMESTAMP         | - |
-| updated_at           | TIMESTAMP         | - |
 
----
+## Membuat Project
 
-## 3. 👤 pasiens
+```bash
+cd ~/boilerplate
+./start.sh uts-basisdata
+```
 
-| Kolom               | Tipe Data          | Keterangan |
-|---------------------|--------------------|------------|
-| id                  | BIGINT (PK, AI)    | - |
-| no_rm               | VARCHAR            | Unique |
-| nama                | VARCHAR            | - |
-| jenis_kelamin       | ENUM(L,P)          | - |
-| tanggal_lahir       | DATE               | Nullable |
-| nik                 | VARCHAR(20)        | Nullable + Unique |
-| no_bpjs             | VARCHAR(20)        | Nullable |
-| telepon             | VARCHAR            | Nullable |
-| alamat              | TEXT               | Nullable |
-| kontak_darurat_nama | VARCHAR            | Nullable |
-| kontak_darurat_hp   | VARCHAR            | Nullable |
-| hubungan_kontak     | VARCHAR            | Nullable |
-| alergi              | TEXT               | Nullable |
-| riwayat_penyakit    | TEXT               | Nullable |
-| catatan_khusus      | TEXT               | Nullable |
-| created_at          | TIMESTAMP          | - |
-| updated_at          | TIMESTAMP          | - |
 
----
+## CLI
 
-## 4. 🧑‍⚕️ dokters
+```bash
+dcu : untuk docker-compose up -d
+dcd : untuk docker-compose down
+dcm Model : untuk create model, controller, seeder, migration, filament resource
+dci : untuk project init dimana sudah termasuk migrate, seed, fresh
+dcr Model : untuk model, controller, seeder, migration, filament resource
+dcp message : untuk git add, git commit dan git push
+dca make:middleware Middleware : dca untuk php artisan
 
-| Kolom                | Tipe Data        | Keterangan |
-|----------------------|------------------|------------|
-| id                   | BIGINT (PK, AI)  | - |
-| kode_dokter          | VARCHAR(20)      | Unique |
-| nama                 | VARCHAR          | - |
-| jenis_kelamin        | ENUM(L,P)        | - |
-| spesialisasi         | VARCHAR          | - |
-| sub_spesialis        | VARCHAR          | Nullable |
-| sip                  | VARCHAR          | Nullable |
-| str                  | VARCHAR          | Nullable |
-| pendidikan_terakhir  | VARCHAR          | Nullable |
-| sertifikasi          | JSON             | Nullable |
-| telepon              | VARCHAR          | Nullable |
-| email                | VARCHAR          | Nullable |
-| poliklinik_id        | BIGINT (FK)      | relasi → polikliniks.id |
-| status_aktif         | BOOLEAN          | Default true |
-| created_at           | TIMESTAMP        | - |
-| updated_at           | TIMESTAMP        | - |
+```
 
----
 
-## 5. 💊 obats
+# Contoh Result CLI
 
-| Kolom          | Tipe Data        | Keterangan |
-|----------------|------------------|------------|
-| id             | BIGINT (PK, AI)  | - |
-| kode_obat      | VARCHAR(30)      | Unique |
-| nama_obat      | VARCHAR          | - |
-| kategori       | VARCHAR          | - |
-| bentuk         | VARCHAR          | Nullable |
-| satuan_dosis   | VARCHAR          | Nullable |
-| aturan_default | VARCHAR          | Nullable |
-| stok           | INTEGER          | Default 0 |
-| stok_minimum   | INTEGER          | Default 0 |
-| kadaluarsa     | DATE             | Nullable |
-| harga_modal    | DECIMAL(12,2)    | Nullable |
-| harga_jual     | DECIMAL(12,2)    | Nullable |
-| created_at     | TIMESTAMP        | - |
-| updated_at     | TIMESTAMP        | - |
+## Migration
 
----
+```php
+ public function up(): void
+    {
+        Schema::create('rumah_sakits', function (Blueprint $table) {
+            $table->id();
+            $table->string('kode_rs', 20)->unique();
+            $table->string('nama');
+            $table->string('kelas_rs')->nullable();
+            $table->string('akreditasi')->nullable();
+            $table->string('penyelenggara');
+            $table->text('alamat');
+            $table->string('kota');
+            $table->string('provinsi');
+            $table->string('kode_pos')->nullable();
+            $table->string('telepon')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
+            $table->json('fasilitas')->nullable();
+            $table->timestamps();
+        });
+    }
+```
 
-## 6. 📅 jadwal_prakteks
 
-| Kolom          | Tipe Data        | Keterangan |
-|----------------|------------------|------------|
-| id             | BIGINT (PK, AI)  | - |
-| dokter_id      | BIGINT (FK)      | relasi → dokters.id |
-| hari           | ENUM             | Senin–Minggu |
-| jam_mulai      | TIME             | - |
-| jam_selesai    | TIME             | - |
-| kuota_pasien   | INTEGER          | Default 20 |
-| perlu_antrian  | BOOLEAN          | Default true |
-| telemedicine   | BOOLEAN          | Default false |
-| created_at     | TIMESTAMP        | - |
-| updated_at     | TIMESTAMP        | - |
+## Model
 
----
+```php
+    class RumahSakit extends Model
+    {
+        use HasFactory;
 
-## 7. 📝 kunjungans
+        protected $guarded = [];
 
-| Kolom             | Tipe Data        | Keterangan |
-|-------------------|------------------|------------|
-| id                | BIGINT (PK, AI)  | - |
-| pasien_id         | BIGINT (FK)      | → pasiens.id |
-| dokter_id         | BIGINT (FK)      | → dokters.id |
-| poliklinik_id     | BIGINT (FK)      | → polikliniks.id |
-| no_antrian        | VARCHAR          | Nullable |
-| waktu_kedatangan  | DATETIME         | Nullable |
-| waktu_dilayani    | DATETIME         | Nullable |
-| waktu_selesai     | DATETIME         | Nullable |
-| keluhan           | TEXT             | Nullable |
-| diagnosa_awal     | TEXT             | Nullable |
-| diagnosa_akhir    | TEXT             | Nullable |
-| pemeriksaan_fisik | JSON             | Nullable |
-| vital_sign        | JSON             | Nullable |
-| tindakan          | JSON             | Nullable |
-| jenis_pembiayaan  | ENUM             | umum/bpjs/asuransi/lainnya (default: umum) |
-| biaya_kunjungan   | DECIMAL(12,2)    | Default 0 |
-| status            | ENUM             | menunggu/dilayani/selesai/batal |
-| created_at        | TIMESTAMP        | - |
-| updated_at        | TIMESTAMP        | - |
+        public function poliklinik()
+        {
+            return $this->hasMany(Poliklinik::class, 'id_rumah_sakit');
+        }
+    }
+```
 
----
 
-## 8. 💊 reseps
+## Controller 
 
-| Kolom        | Tipe Data        | Keterangan |
-|--------------|------------------|------------|
-| id           | BIGINT (PK, AI)  | - |
-| kunjungan_id | BIGINT (FK)      | → kunjungans.id |
-| obat_id      | BIGINT (FK)      | → obats.id |
-| jumlah       | INTEGER          | Default 1 |
-| dosis        | VARCHAR          | Nullable |
-| frekuensi    | VARCHAR          | Nullable |
-| durasi       | VARCHAR          | Nullable |
-| cara_pakai   | VARCHAR          | Nullable |
-| catatan      | VARCHAR          | Nullable |
-| harga_satuan | DECIMAL(12,2)    | Nullable |
-| subtotal     | DECIMAL(12,2)    | Nullable |
-| created_at   | TIMESTAMP        | - |
-| updated_at   | TIMESTAMP        | - |
+```php
+    class RumahSakitController extends Controller
+    {
+        //
+    }
+```
+
+
+## Resource Filament (List)
+
+```php
+    class ListRumahSakits extends ListRecords
+    {
+        protected static string $resource = RumahSakitResource::class;
+
+        protected function getHeaderActions(): array
+        {
+            return [
+                Actions\CreateAction::make(),
+            ];
+        }
+    }
+```
+
+# Contoh Membuat Factory
+
+```php
+    class RumahSakitFactory extends Factory
+    {
+        public function definition(): array
+        {
+            return [
+                'kode_rs' => 'RS-' . $this->faker->unique()->numerify('#####'),
+                'nama' => $this->faker->company . ' Hospital',
+                'kelas_rs' => $this->faker->randomElement(['A', 'B', 'C', 'D']),
+                'akreditasi' => $this->faker->randomElement(['Paripurna', 'Utama', 'Madya', 'Dasar']),
+                'penyelenggara' => $this->faker->randomElement(['Pemerintah', 'Swasta', 'TNI', 'Polri']),
+                'alamat' => $this->faker->address,
+                'kota' => $this->faker->city,
+                'provinsi' => $this->faker->state,
+                'kode_pos' => $this->faker->postcode,
+                'telepon' => $this->faker->phoneNumber,
+                'email' => $this->faker->safeEmail,
+                'website' => $this->faker->domainName,
+                'fasilitas' => json_encode([
+                    'igd' => $this->faker->boolean,
+                    'icu' => $this->faker->boolean,
+                    'rawat_inap' => $this->faker->boolean,
+                    'farmasi' => $this->faker->boolean,
+                ]),
+            ];
+        }
+    }
+```
+
+# Contoh menggunakan Factory
+
+```php
+    RumahSakit::factory(5)->create();
+```
+
+
+## Langkah Terakhir : Update Data DB & Update Resource Filament
+
+```bash
+dci
+dcm Model (Setiap model yg sudah dibuat melakukan dcm kembali)
+
+cek website project : uts-basisdata.test
+```
